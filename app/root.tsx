@@ -2,9 +2,15 @@ import { isRouteErrorResponse, Outlet } from "react-router";
 
 import type { Route } from "./+types/root";
 import "./app.css";
+import NavBar from "./layouts/navbar";
 
 export default function App() {
-  return <Outlet />;
+  return (
+    <>
+      <NavBar />
+      <Outlet />
+    </>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {

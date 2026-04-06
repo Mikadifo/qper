@@ -21,16 +21,14 @@
   --font-league: "LeagueSpartan";
 
   --color-dark: #2c2c2c;
-  --color-main: #00a97f;
+  --color-teal: #00a97f;
   --color-blue: #0060d1;
   --color-white: #f3faf8;
 }
 
-html,
-body {
-  @apply bg-white dark:bg-dark;
-
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
-  }
+:root,
+body,
+html {
+  background: var(--color-white);
+  font-family: var(--font-sans);
 }
