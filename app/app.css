@@ -21,9 +21,23 @@
   --font-league: "LeagueSpartan";
 
   --color-dark: #2c2c2c;
+  --color-dark-04: rgb(44, 44, 44, 0.04);
+  --color-dark-64: rgb(44, 44, 44, 0.64);
   --color-teal: #00a97f;
   --color-blue: #0060d1;
   --color-white: #f3faf8;
+  --color-red: #aa1010;
+
+  --shadow-a:
+    0px 26px 56px 0px rgba(0, 0, 0, 0.1),
+    0px 102px 102px 0px rgba(0, 0, 0, 0.09),
+    0px 230px 138px 0px rgba(0, 0, 0, 0.05),
+    0px 408px 163px 0px rgba(0, 0, 0, 0.01),
+    0px 638px 179px 0px rgba(0, 0, 0, 0);
+}
+
+.shadow-a {
+  box-shadow: var(--shadow-a);
 }
 
 :root,
