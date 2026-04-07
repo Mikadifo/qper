@@ -44,9 +44,9 @@ function FormProjectDialog({
       let res;
 
       if (id) {
-        res = await api.put(`/projects/${id}`, projectName);
+        res = await api.put(`/project/${id}`, projectName);
       } else {
-        res = await api.post("/projects", projectName);
+        res = await api.post("/project", projectName);
       }
 
       setAlert({

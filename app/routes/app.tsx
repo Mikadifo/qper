@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import NewIcon from "@assets/icons/newIcon.svg?react";
+import ArrowSolidIcon from "@assets/icons/arrowSolidIcon.svg?react";
 import DownloadIcon from "@assets/icons/downloadIcon.svg?react";
 import type { Route } from "./+types/app";
 import Button from "~/components/Button";
@@ -19,6 +20,8 @@ export function meta({}: Route.MetaArgs) {
 
 export default function App() {
   const [projects, setProjects] = useState<Project[]>([]);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [isProjectsOptionsOpen, openProjectOptions] = useState(false);
   const [alert, setAlert] = useState<AlertState>({
     open: false,
     message: "",
@@ -41,6 +44,7 @@ export default function App() {
       const { data } = response;
 
       setProjects(data);
+      setSelectedProject(data[0]);
     } catch (err) {
       const error = err as AxiosError<{ error: string }>;
 
@@ -60,19 +64,52 @@ export default function App() {
 
   return (
     <section className="flex flex-col gap-16 p-16">
-      <div className="flex justify-between">
+      <div className="flex justify-between items-center">
         {projects.length === 0 ? (
           <Button className="bg-blue! flex gap-2" onClick={openFormDialog}>
             <NewIcon />
             Create Project
           </Button>
         ) : (
-          <div>
+          <div className="flex flex-col gap-2 relative">
             <label className="font-bold text-lg">Project:</label>
 
-            <select name="project">
-              <option value="">Create new project</option>
-            </select>
+            <button
+              type="button"
+              className="border-2 border-dark-32 rounded-lg py-2 px-6 cursor-pointer flex justify-between w-[200px] items-center"
+              onClick={() => openProjectOptions(!isProjectsOptionsOpen)}
+            >
+              {projects[0].name}
+              <ArrowSolidIcon />
+            </button>
+
+            <div
+              className="absolute bottom-0 translate-y-full w-full rounded-lg border-2 border-dark-32 flex flex-col gap-1 p-2"
+              hidden={!isProjectsOptionsOpen}
+            >
+              {projects
+                .filter((p) => p.id !== selectedProject?.id)
+                .map((project) => (
+                  <Fragment key={project.id}>
+                    <button
+                      type="button"
+                      className="cursor-pointer hover:opacity-75 w-full text-start px-4 py-2"
+                      onClick={() => setSelectedProject(project)}
+                    >
+                      {project.name}
+                    </button>
+                    <div className="w-full h-0.5 bg-dark-04" />
+                  </Fragment>
+                ))}
+              <button
+                type="button"
+                className="flex items-center gap-2 font-bold cursor-pointer hover:opacity-75 w-full px-4 py-2"
+                onClick={openFormDialog}
+              >
+                <NewIcon />
+                New project
+              </button>
+            </div>
           </div>
         )}
 
