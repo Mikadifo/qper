@@ -31,4 +31,5 @@ body,
 html {
   background: var(--color-white);
   font-family: var(--font-sans);
+  color: var(--color-dark);
 }

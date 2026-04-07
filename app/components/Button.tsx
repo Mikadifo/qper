@@ -13,7 +13,7 @@ function Button({
   children,
   to = "",
 }: ButtonProps) {
-  const styles = `inline-flex items-center bg-teal rounded-lg py-2 px-6 text-white font-bold text-base hover:opacity-75 cursor-pointer ${className}`;
+  const styles = `w-fit inline-flex items-center bg-teal rounded-lg py-2 px-6 text-white font-bold text-base hover:opacity-75 cursor-pointer ${className}`;
 
   if (type === "link") {
     return (
