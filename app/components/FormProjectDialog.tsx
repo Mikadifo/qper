@@ -9,12 +9,14 @@ import CloseIcon from "@assets/icons/closeIcon.svg?react";
 import api from "./../axiosConfig";
 import type { ProjectValues } from "~/schemas/project.schema";
 import type { AxiosError } from "axios";
+import type { Project } from "~/dtos/project.dto";
 
 interface FormProps {
   dialogRef: RefObject<HTMLDialogElement | null>;
   open?: boolean;
   id?: number | null;
   name?: string;
+  setProjects: React.Dispatch<React.SetStateAction<Project[]>>;
 }
 
 function FormProjectDialog({
@@ -22,6 +24,7 @@ function FormProjectDialog({
   open = false,
   id = null,
   name = "",
+  setProjects,
 }: FormProps) {
   const [alert, setAlert] = useState<AlertState>({
     open: false,
@@ -56,11 +59,11 @@ function FormProjectDialog({
       });
 
       if (id) {
-        console.log(res.data);
-        //dispatch(updateList(res.data));
+        setProjects((prev) =>
+          prev.map((p) => (p.id === id ? { ...p, name: res.data.name } : p)),
+        );
       } else {
-        console.log(res.data);
-        //dispatch(newList(res.data));
+        setProjects((prev) => [...prev, res.data]);
       }
 
       handleClose(resetForm);

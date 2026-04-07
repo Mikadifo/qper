@@ -19,6 +19,7 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function App() {
+  const [loadingProjects, setLoadingProjects] = useState(false);
   const [projects, setProjects] = useState<Project[]>([]);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isProjectsOptionsOpen, openProjectOptions] = useState(false);
@@ -39,6 +40,7 @@ export default function App() {
 
   async function getProjects() {
     try {
+      setLoadingProjects(true);
       const response = await api.get("/project");
 
       const { data } = response;
@@ -53,6 +55,8 @@ export default function App() {
         message: error.response?.data.error || "Something went wrong",
         severity: "error",
       });
+    } finally {
+      setLoadingProjects(false);
     }
   }
 
@@ -65,7 +69,9 @@ export default function App() {
   return (
     <section className="flex flex-col gap-16 p-16">
       <div className="flex justify-between items-center">
-        {projects.length === 0 ? (
+        {loadingProjects ? (
+          "Fetching projects..."
+        ) : projects.length === 0 ? (
           <Button className="bg-blue! flex gap-2" onClick={openFormDialog}>
             <NewIcon />
             Create Project
@@ -128,7 +134,7 @@ export default function App() {
 
       <div></div>
 
-      <FormProjectDialog dialogRef={formDialogRef} />
+      <FormProjectDialog dialogRef={formDialogRef} setProjects={setProjects} />
       <Alert alert={alert} setAlert={setAlert} />
     </section>
   );
