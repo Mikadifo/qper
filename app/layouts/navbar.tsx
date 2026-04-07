@@ -4,6 +4,12 @@ import Button from "~/components/Button";
 import { Outlet } from "react-router";
 
 function NavBar() {
+  const isLoggedIn = () => {
+    const token = localStorage.getItem("token");
+
+    return token;
+  };
+
   return (
     <>
       <nav className="px-8 py-4 flex justify-between">
@@ -14,14 +20,18 @@ function NavBar() {
           </span>
         </div>
 
-        <div className="flex gap-4 items-center">
-          <Button type="link" to="/register">
-            Sign Up
-          </Button>
-          <Link to="/login" className="text-base font-bold hover:opacity-75">
-            Log In
-          </Link>
-        </div>
+        {isLoggedIn() ? (
+          <Button>Account LOGO</Button>
+        ) : (
+          <div className="flex gap-4 items-center">
+            <Button type="link" to="/register">
+              Sign Up
+            </Button>
+            <Link to="/login" className="text-base font-bold hover:opacity-75">
+              Log In
+            </Link>
+          </div>
+        )}
       </nav>
 
       <Outlet />

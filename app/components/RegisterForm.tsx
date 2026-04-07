@@ -26,7 +26,7 @@ function RegisterForm() {
         localStorage.setItem("token", token);
       }
 
-      navigate("/movies");
+      navigate("/app");
     } catch (err) {
       const error = err as AxiosError<{ error: string }>;
 

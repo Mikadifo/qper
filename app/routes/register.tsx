@@ -2,7 +2,8 @@ import Logo from "@assets/logo.svg?react";
 import ArrowIcon from "@assets/icons/arrowIcon.svg?react";
 import type { Route } from "./+types/register";
 import RegisterForm from "~/components/RegisterForm";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useEffect } from "react";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -12,6 +13,16 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Register() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      navigate("/app");
+    }
+  }, []);
+
   return (
     <section className="w-screen h-screen flex justify-center items-center">
       <div className="flex gap-0 shadow-a rounded-lg">
