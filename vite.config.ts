@@ -10,8 +10,7 @@ export default defineConfig({
     tsconfigPaths: true,
     alias: {
       "@components": path.resolve(__dirname, "./app/components"),
-      "@redux": path.resolve(__dirname, "./app/redux"),
-      "@pages": path.resolve(__dirname, "./app/routes"),
+      "@routes": path.resolve(__dirname, "./app/routes"),
       "@assets": path.resolve(__dirname, "./app/assets"),
       "@schemas": path.resolve(__dirname, "./app/schemas"),
     },

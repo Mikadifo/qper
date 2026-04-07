@@ -5,6 +5,7 @@ interface ButtonProps {
   to?: To;
   className?: string;
   children: React.ReactNode;
+  onClick?: () => void;
 }
 
 function Button({
@@ -12,6 +13,7 @@ function Button({
   className = "",
   children,
   to = "",
+  onClick = () => {},
 }: ButtonProps) {
   const styles = `w-fit justify-center inline-flex items-center bg-teal rounded-lg py-2 px-6 text-white font-bold text-base hover:opacity-75 cursor-pointer ${className}`;
 
@@ -24,7 +26,7 @@ function Button({
   }
 
   return (
-    <button type={type} className={styles}>
+    <button type={type} className={styles} onClick={onClick}>
       {children}
     </button>
   );
