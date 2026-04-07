@@ -1,0 +1,140 @@
+import NewIcon from "@assets/icons/newIcon.svg?react";
+import api from "~/axiosConfig";
+import type { AxiosError } from "axios";
+import Button from "~/components/Button";
+import ArrowSolidIcon from "@assets/icons/arrowSolidIcon.svg?react";
+import DownloadIcon from "@assets/icons/downloadIcon.svg?react";
+import {
+  Fragment,
+  useEffect,
+  useRef,
+  useState,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
+import FormProjectDialog from "~/components/FormProjectDialog";
+import type { AlertState } from "./Alert";
+import type { Project } from "~/dtos/project.dto";
+
+interface AppHeaderBarProps {
+  selectedProject: Project | null;
+  setAlert: Dispatch<SetStateAction<AlertState>>;
+  setSelectedProject: Dispatch<SetStateAction<Project | null>>;
+}
+
+function AppHeaderBar({
+  setAlert,
+  selectedProject,
+  setSelectedProject,
+}: AppHeaderBarProps) {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loadingProjects, setLoadingProjects] = useState(false);
+  const [isProjectsOptionsOpen, openProjectOptions] = useState(false);
+  const formDialogRef = useRef<HTMLDialogElement | null>(null);
+
+  useEffect(() => {
+    const fetch = async () => {
+      await getProjects();
+    };
+
+    fetch();
+  }, []);
+
+  async function getProjects() {
+    try {
+      setLoadingProjects(true);
+      const response = await api.get("/project");
+
+      const { data } = response;
+
+      setProjects(data);
+      setSelectedProject(data[0]);
+    } catch (err) {
+      const error = err as AxiosError<{ error: string }>;
+
+      setAlert({
+        open: true,
+        message: error.response?.data.error || "Something went wrong",
+        severity: "error",
+      });
+    } finally {
+      setLoadingProjects(false);
+    }
+  }
+
+  const openFormDialog = () => {
+    if (formDialogRef.current) {
+      formDialogRef.current.showModal();
+    }
+  };
+
+  return (
+    <div className="flex justify-between items-center">
+      {loadingProjects ? (
+        "Fetching projects..."
+      ) : projects.length === 0 ? (
+        <Button className="bg-blue! flex gap-2" onClick={openFormDialog}>
+          <NewIcon />
+          Create Project
+        </Button>
+      ) : (
+        <div className="flex flex-col gap-2 relative">
+          <label className="font-bold text-lg">Project:</label>
+
+          <button
+            type="button"
+            className="border-2 border-dark-32 rounded-lg py-2 px-6 cursor-pointer flex justify-between w-[240px] items-center"
+            onClick={() => openProjectOptions(!isProjectsOptionsOpen)}
+          >
+            {selectedProject?.name}
+            <ArrowSolidIcon />
+          </button>
+
+          <div
+            className="absolute bottom-0 translate-y-full w-full rounded-lg border-2 border-dark-32 flex flex-col gap-1 p-2 bg-white"
+            hidden={!isProjectsOptionsOpen}
+          >
+            {projects
+              .filter((p) => p.id !== selectedProject?.id)
+              .map((project) => (
+                <Fragment key={project.id}>
+                  <button
+                    type="button"
+                    className="cursor-pointer hover:opacity-75 w-full text-start px-4 py-2"
+                    onClick={() => setSelectedProject(project)}
+                  >
+                    {project.name}
+                  </button>
+                  <div className="w-full h-0.5 bg-dark-04" />
+                </Fragment>
+              ))}
+            <button
+              type="button"
+              className="flex items-center gap-2 font-bold cursor-pointer hover:opacity-75 w-full px-4 py-2"
+              onClick={openFormDialog}
+            >
+              <NewIcon />
+              New project
+            </button>
+          </div>
+        </div>
+      )}
+
+      <div className="flex gap-8">
+        <Button className="bg-dark! flex gap-2">
+          <DownloadIcon />
+          Download Report
+        </Button>
+
+        <Button className="bg-dark! flex gap-2">
+          <NewIcon />
+          Create new issue
+        </Button>
+      </div>
+
+      <FormProjectDialog dialogRef={formDialogRef} setProjects={setProjects} />
+    </div>
+  );
+}
+
+export default AppHeaderBar;
