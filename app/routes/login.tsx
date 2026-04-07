@@ -2,6 +2,7 @@ import LoginForm from "~/components/LoginForm";
 import Logo from "@assets/logo.svg?react";
 import ArrowIcon from "@assets/icons/arrowIcon.svg?react";
 import type { Route } from "./+types/login";
+import { Link } from "react-router";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -40,13 +41,13 @@ export default function Login() {
 
         <div className="w-[464px] rounded-e-lg p-16 flex flex-col gap-16">
           <div className="flex justify-between">
-            <button
-              type="button"
+            <Link
+              to="/"
               className="flex items-center gap-1 hover:opacity-75 cursor-pointer"
             >
               <ArrowIcon />
               Go Back
-            </button>
+            </Link>
 
             <div className="flex gap-1 items-center">
               <Logo className="size-9" />
