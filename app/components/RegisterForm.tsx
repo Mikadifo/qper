@@ -19,14 +19,9 @@ function RegisterForm() {
 
   const handleSubmit = async (values: RegisterValues) => {
     try {
-      const res = await axios.post(`${BASE_URL}/auth/login`, values);
-      const token = res.data.token;
+      await axios.post(`${BASE_URL}/auth/register`, values);
 
-      if (token) {
-        localStorage.setItem("token", token);
-      }
-
-      navigate("/app");
+      navigate("/login");
     } catch (err) {
       const error = err as AxiosError<{ error: string }>;
 
