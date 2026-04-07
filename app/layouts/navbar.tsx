@@ -28,16 +28,18 @@ function NavBar() {
       await getUsername();
     };
 
-    fetch();
+    if (isLoggedIn()) {
+      fetch();
+    }
   }, []);
 
   async function getUsername() {
     try {
-      const response = await api.get("/me");
+      const response = await api.get("/user/me");
 
       const { data } = response;
 
-      setUsername(data);
+      setUsername(data.username);
     } catch (err) {
       const error = err as AxiosError<{ error: string }>;
 
