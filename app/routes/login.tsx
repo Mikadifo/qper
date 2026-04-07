@@ -1,7 +1,7 @@
 import LoginForm from "~/components/LoginForm";
 import Logo from "@assets/logo.svg?react";
 import ArrowIcon from "@assets/icons/arrowIcon.svg?react";
-import type { Route } from "./+types/home";
+import type { Route } from "./+types/login";
 
 export function meta({}: Route.MetaArgs) {
   return [

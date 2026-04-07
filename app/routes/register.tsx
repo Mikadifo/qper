@@ -1,8 +1,11 @@
-import type { Route } from "./+types/home";
+import Logo from "@assets/logo.svg?react";
+import ArrowIcon from "@assets/icons/arrowIcon.svg?react";
+import type { Route } from "./+types/register";
+import RegisterForm from "~/components/RegisterForm";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Qper | Login" },
+    { title: "Qper | Register" },
     { name: "description", content: "Welcome Back!" },
   ];
 }
@@ -14,8 +17,8 @@ export default function Register() {
         <div className="rounded-s-lg relative">
           <img
             src="https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt=""
-            className="w-[464px] rounded-s-lg"
+            alt="Unsplash image"
+            className="w-[464px] rounded-s-lg h-full"
           />
           <span className="absolute bottom-0 left-0 text-white opacity-65 text-xs ms-4 mb-4">
             Photo by{" "}
@@ -35,7 +38,26 @@ export default function Register() {
           </span>
         </div>
 
-        <div>Register FROM HERE</div>
+        <div className="w-[464px] rounded-e-lg p-16 flex flex-col gap-16">
+          <div className="flex justify-between">
+            <button
+              type="button"
+              className="flex items-center gap-1 hover:opacity-75 cursor-pointer"
+            >
+              <ArrowIcon />
+              Go Back
+            </button>
+
+            <div className="flex gap-1 items-center">
+              <Logo className="size-9" />
+              <span className="text-teal font-bold font-league text-[32px]">
+                Qper
+              </span>
+            </div>
+          </div>
+
+          <RegisterForm />
+        </div>
       </div>
     </section>
   );

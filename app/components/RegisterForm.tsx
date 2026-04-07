@@ -2,14 +2,14 @@ import { Form, Formik } from "formik";
 import { BASE_URL } from "../constants";
 import Input from "./Input";
 import Button from "./Button";
-import loginSchema from "@schemas/login.schema";
 import { useState } from "react";
 import axios, { AxiosError } from "axios";
 import Alert, { type AlertState } from "./Alert";
 import { Link, useNavigate } from "react-router";
-import type { LoginValues } from "~/schemas/login.schema";
+import type { RegisterValues } from "~/schemas/register.schema";
+import registerSchema from "~/schemas/register.schema";
 
-function LoginForm() {
+function RegisterForm() {
   const navigate = useNavigate();
   const [alert, setAlert] = useState<AlertState>({
     open: false,
@@ -17,7 +17,7 @@ function LoginForm() {
     severity: "success",
   });
 
-  const handleSubmit = async (values: LoginValues) => {
+  const handleSubmit = async (values: RegisterValues) => {
     try {
       const res = await axios.post(`${BASE_URL}/auth/login`, values);
       const token = res.data.token;
@@ -39,19 +39,20 @@ function LoginForm() {
   };
 
   return (
-    <Formik<LoginValues>
+    <Formik<RegisterValues>
       initialValues={{
         email: "",
+        username: "",
         password: "",
       }}
-      validationSchema={loginSchema}
+      validationSchema={registerSchema}
       onSubmit={handleSubmit}
     >
       {({ errors, touched }) => {
         return (
           <Form className="w-fit">
             <h1 className="font-league font-bold text-center text-[28px] mb-8">
-              Welcome Back!
+              Welcome!
             </h1>
 
             <div className="flex flex-col gap-6 w-80">
@@ -63,6 +64,19 @@ function LoginForm() {
                 error={touched.email && Boolean(errors.email)}
                 helperText={
                   touched.email && errors.email ? String(errors.email) : ""
+                }
+                required
+              />
+              <Input
+                label="Username:"
+                type="text"
+                name="username"
+                placeholder="JhonJay"
+                error={touched.username && Boolean(errors.username)}
+                helperText={
+                  touched.username && errors.username
+                    ? String(errors.username)
+                    : ""
                 }
                 required
               />
@@ -83,13 +97,13 @@ function LoginForm() {
 
             <div className="flex flex-col gap-2 mt-8">
               <Button type="submit" className="w-full bg-cyan! text-white">
-                Log In
+                Sign Up
               </Button>
 
               <div className="flex gap-2 text-sm font-body mx-auto">
-                <span>Don’t have an account yet?</span>
-                <Link to="/register" className="font-bold hover:underline">
-                  Sign Up
+                <span>Already have an account?</span>
+                <Link to="/login" className="font-bold hover:underline">
+                  Log In
                 </Link>
               </div>
             </div>
@@ -102,4 +116,4 @@ function LoginForm() {
   );
 }
 
-export default LoginForm;
+export default RegisterForm;
