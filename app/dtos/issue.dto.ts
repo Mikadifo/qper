@@ -1,5 +1,7 @@
 export interface Issue {
   id: number;
   title: string;
-  //createdAt: string;
+  description: string;
+  steps: string;
+  createdAt: Date;
 }

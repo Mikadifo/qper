@@ -1,7 +1,10 @@
-import { useState, type Dispatch, type SetStateAction } from "react";
+import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import type { Issue } from "~/dtos/issue.dto";
 import type { Project } from "~/dtos/project.dto";
 import type { AlertState } from "./Alert";
+import api from "~/axiosConfig";
+import type { AxiosError } from "axios";
+import TrashIcon from "@assets/icons/trashIcon.svg?react";
 
 interface IssuesListProps {
   selectedProject: Project | null;
@@ -17,6 +20,38 @@ function IssuesList({
   setAlert,
 }: IssuesListProps) {
   const [issues, setIssues] = useState<Issue[]>([]);
+  const [loadingIssues, setLoadingIssues] = useState<boolean>(false);
+
+  useEffect(() => {
+    const fetch = async () => {
+      await getIssues();
+    };
+
+    if (selectedProject) {
+      fetch();
+    }
+  }, [selectedProject]);
+
+  async function getIssues() {
+    try {
+      setLoadingIssues(true);
+      const response = await api.get(`/issues/all/${selectedProject?.id}`);
+
+      const { data } = response;
+
+      setIssues(data);
+    } catch (err) {
+      const error = err as AxiosError<{ error: string }>;
+
+      setAlert({
+        open: true,
+        message: error.response?.data.error || "Something went wrong",
+        severity: "error",
+      });
+    } finally {
+      setLoadingIssues(false);
+    }
+  }
 
   return (
     <div className="w-[364px]">
@@ -27,15 +62,37 @@ function IssuesList({
         </span>
       </div>
 
-      {issues.length === 0 ? (
+      {loadingIssues ? (
+        "Fetching issues..."
+      ) : issues.length === 0 ? (
         <span className="text-dark-80 text-sm">
           You haven’t created any issues yet
         </span>
       ) : (
         <div className="flex flex-col gap-4">
-          {issues.map((issue) => (
-            <button type="button" key={issue.id}>
-              l
+          {issues.map((issue, index) => (
+            <button
+              type="button"
+              key={issue.id}
+              className={`bg-dark-04 rounded-lg py-2 px-6 flex justify-between items-center hover:opacity-75 ${selectedIssue?.id === issue.id && "border border-dark-32"} cursor-pointer`}
+              onClick={() => setSelectedIssue(issue)}
+            >
+              <div className="flex gap-3 items-center">
+                <span className="font-bold text-base">{index + 1}</span>
+
+                <div className="flex flex-col">
+                  <span className="font-bold text-base">{issue.title}</span>
+                  <span className="text-sm text-dark-80">2min ago</span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {}}
+                className="cursor-pointer"
+              >
+                <TrashIcon />
+              </button>
             </button>
           ))}
         </div>
