@@ -1,6 +1,8 @@
 import AddIcon from "@assets/icons/newIcon.svg?react";
+import CloseIcon from "@assets/icons/closeIcon.svg?react";
 import { useFormikContext } from "formik";
 import { useRef } from "react";
+import { getOrientation } from "~/utils/file";
 
 interface FileInputProps {
   name: string;
@@ -30,14 +32,33 @@ function FileInput({
       </label>
 
       <div className="flex gap-3 flex-wrap">
-        {values[name]?.map((file: File) => (
-          <div
-            key={file.name + file.size}
-            className="rounded-lg bg-dark-04 p-3"
-          >
-            <img src={URL.createObjectURL(file)} />
-          </div>
-        ))}
+        {values[name]?.map((preview: PreviewFile) => {
+          const { url, orientation } = preview;
+
+          return (
+            <div
+              key={url}
+              className="rounded-lg bg-dark-04 p-3 h-fit relative z-10"
+            >
+              <img
+                src={url}
+                className={
+                  orientation === "portrait"
+                    ? "w-[220px] h-auto"
+                    : "w-[220px] h-auto"
+                }
+              />
+
+              <button
+                type="button"
+                className="bg-dark-32 p-1 size-8 rounded-full flex justify-center items-center absolute top-4 right-4 z-20 cursor-pointer hover:opacity-75"
+                onClick={() => {}}
+              >
+                <CloseIcon className="text-white" />
+              </button>
+            </div>
+          );
+        })}
 
         <button
           type="button"
@@ -52,15 +73,21 @@ function FileInput({
         type="file"
         ref={inputRef}
         hidden
-        onChange={(e) => {
+        onChange={async (e) => {
           const file = e.target.files?.[0];
 
           if (!file) {
             return;
           }
 
+          const orientation = await getOrientation(file);
+          const preview: PreviewFile = {
+            file,
+            orientation,
+            url: URL.createObjectURL(file),
+          };
           const current = Array.isArray(values[name]) ? values[name] : [];
-          setFieldValue(name, [...current, file]);
+          setFieldValue(name, [...current, preview]);
         }}
       />
 
