@@ -30,6 +30,7 @@ export default function App() {
         setAlert={setAlert}
         selectedProject={selectedProject}
         setSelectedProject={setSelectedProject}
+        setSelectedIssue={setSelectedIssue}
       />
 
       <div className="flex gap-16 w-full">
@@ -41,6 +42,7 @@ export default function App() {
         />
         <IssueReport
           selectedIssue={selectedIssue}
+          selectedProject={selectedProject}
           setSelectedIssue={setSelectedIssue}
           setAlert={setAlert}
         />

@@ -15,17 +15,20 @@ import {
 import FormProjectDialog from "~/components/FormProjectDialog";
 import type { AlertState } from "./Alert";
 import type { Project } from "~/dtos/project.dto";
+import type { Issue } from "~/dtos/issue.dto";
 
 interface AppHeaderBarProps {
   selectedProject: Project | null;
   setAlert: Dispatch<SetStateAction<AlertState>>;
   setSelectedProject: Dispatch<SetStateAction<Project | null>>;
+  setSelectedIssue: Dispatch<SetStateAction<Issue | null>>;
 }
 
 function AppHeaderBar({
   setAlert,
   selectedProject,
   setSelectedProject,
+  setSelectedIssue,
 }: AppHeaderBarProps) {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loadingProjects, setLoadingProjects] = useState(false);
@@ -126,7 +129,10 @@ function AppHeaderBar({
           Download Report
         </Button>
 
-        <Button className="bg-dark! flex gap-2">
+        <Button
+          className="bg-dark! flex gap-2"
+          onClick={() => setSelectedIssue(null)}
+        >
           <NewIcon />
           Create new issue
         </Button>

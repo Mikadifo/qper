@@ -3,5 +3,7 @@ export interface Issue {
   title: string;
   description: string;
   steps: string;
+  expectedResult: string;
+  actualResult: string;
   createdAt: Date;
 }

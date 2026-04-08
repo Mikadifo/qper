@@ -80,19 +80,13 @@ function IssuesList({
               <div className="flex gap-3 items-center">
                 <span className="font-bold text-base">{index + 1}</span>
 
-                <div className="flex flex-col">
+                <div className="flex flex-col text-start">
                   <span className="font-bold text-base">{issue.title}</span>
                   <span className="text-sm text-dark-80">2min ago</span>
                 </div>
               </div>
 
-              <button
-                type="button"
-                onClick={() => {}}
-                className="cursor-pointer"
-              >
-                <TrashIcon />
-              </button>
+              <TrashIcon className="cursor-pointer" onClick={() => {}} />
             </button>
           ))}
         </div>
