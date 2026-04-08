@@ -150,7 +150,7 @@ function FormProjectDialog({
               </div>
 
               <Button type="submit" className="w-full bg-green! mt-12">
-                {id ? "Upate" : "Add"} Project
+                {id ? "Save Changes" : "Add"} Project
               </Button>
             </Form>
           );

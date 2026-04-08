@@ -9,6 +9,7 @@ import issueSchema from "~/schemas/issue.schema";
 import Input from "./Input";
 import Button from "./Button";
 import api from "~/axiosConfig";
+import FileInput from "./FileInput";
 
 interface IssueReportProps {
   selectedIssue: Issue | null;
@@ -124,6 +125,7 @@ function IssueReport({
           steps: issue?.steps || "",
           expectedResult: issue?.expectedResult || "",
           actualResult: issue?.actualResult || "",
+          screenshots: [] as File[],
         }}
         validationSchema={issueSchema}
         onSubmit={handleSubmit}
@@ -195,6 +197,17 @@ function IssueReport({
                       : ""
                   }
                   required
+                />
+                <FileInput
+                  label="Screenshots:"
+                  name="screenshots"
+                  projectId={selectedProject?.id}
+                  error={touched.screenshots && Boolean(errors.screenshots)}
+                  helperText={
+                    touched.screenshots && errors.screenshots
+                      ? String(errors.screenshots)
+                      : ""
+                  }
                 />
               </div>
 

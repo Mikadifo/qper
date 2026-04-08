@@ -6,6 +6,7 @@ export interface IssueValues {
   steps: string;
   expectedResult: string;
   actualResult: string;
+  screenshots: File[];
 }
 
 const issueSchema = Yup.object({
@@ -14,6 +15,10 @@ const issueSchema = Yup.object({
   steps: Yup.string().required("Steps is required"),
   expectedResult: Yup.string().required("Expected Result is required"),
   actualResult: Yup.string().required("Actual Result is required"),
+  screenshots: Yup.array()
+    .of(Yup.mixed<File>())
+    .min(1, "At least one screenshot is required")
+    .required("Screenshots are required"),
 });
 
 export default issueSchema;
