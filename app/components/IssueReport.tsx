@@ -92,9 +92,17 @@ function IssueReport({
 
   const handleUpdate = async (values: IssueValues) => {
     try {
-      const res = await api.put(`api/issues/${selectedIssue?.id}`, values);
+      const res = await api.put(`issues/${selectedIssue?.id}`, values);
 
-      console.log(res);
+      const data = res.data;
+
+      setIssue(data);
+      setAlert({
+        open: true,
+        message: "Issue Updated",
+        severity: "success",
+      });
+      setIssues((prev) => prev.map((i) => (i.id === data.id ? data : i)));
     } catch (err) {
       const error = err as AxiosError<{ error: string }>;
 
