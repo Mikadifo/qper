@@ -107,7 +107,7 @@ function IssueReport({
                 />
                 <Input
                   label="Description:"
-                  type="text"
+                  as="textarea"
                   name="description"
                   placeholder="Issue Description"
                   error={touched.description && Boolean(errors.description)}
@@ -120,6 +120,7 @@ function IssueReport({
                 />
                 <Input
                   label="Steps to Reproduce:"
+                  as="textarea"
                   type="text"
                   name="steps"
                   placeholder="Issue Steps"
@@ -145,10 +146,10 @@ function IssueReport({
                   required
                 />
                 <Input
-                  label="Steps to Reproduce:"
+                  label="Actual Behavior:"
                   type="text"
                   name="actualResult"
-                  placeholder="Issue Steps"
+                  placeholder="Actual Result"
                   error={touched.actualResult && Boolean(errors.actualResult)}
                   helperText={
                     touched.actualResult && errors.actualResult
