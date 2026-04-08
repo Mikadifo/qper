@@ -38,20 +38,23 @@ function FileInput({
           return (
             <div
               key={url}
-              className="rounded-lg bg-dark-04 p-3 h-fit relative z-10"
+              className="group rounded-lg bg-dark-04 p-3 h-fit relative z-10"
             >
               <img
                 src={url}
-                className={
-                  orientation === "portrait"
-                    ? "w-[220px] h-auto"
-                    : "w-[220px] h-auto"
-                }
+                className={`
+		    object-cover
+                  ${
+                    orientation === "portrait"
+                      ? "w-[220px] h-auto"
+                      : "w-[220px] h-auto"
+                  }
+		    `}
               />
 
               <button
                 type="button"
-                className="bg-dark-32 p-1 size-8 rounded-full flex justify-center items-center absolute top-4 right-4 z-20 cursor-pointer hover:opacity-75"
+                className="absolute bg-dark p-1 size-8 rounded-full flex justify-center items-center z-20 cursor-pointer hover:opacity-75 bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity top-4 right-4"
                 onClick={() => {}}
               >
                 <CloseIcon className="text-white" />
