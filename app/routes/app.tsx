@@ -18,6 +18,7 @@ export function meta({}: Route.MetaArgs) {
 export default function App() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [selectedIssue, setSelectedIssue] = useState<Issue | null>(null);
+  const [issues, setIssues] = useState<Issue[]>([]);
   const [alert, setAlert] = useState<AlertState>({
     open: false,
     message: "",
@@ -35,6 +36,8 @@ export default function App() {
 
       <div className="flex gap-16 w-full">
         <IssuesList
+          issues={issues}
+          setIssues={setIssues}
           selectedProject={selectedProject}
           selectedIssue={selectedIssue}
           setSelectedIssue={setSelectedIssue}
@@ -44,6 +47,7 @@ export default function App() {
           selectedIssue={selectedIssue}
           selectedProject={selectedProject}
           setSelectedIssue={setSelectedIssue}
+          setIssues={setIssues}
           setAlert={setAlert}
         />
       </div>

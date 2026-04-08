@@ -7,19 +7,22 @@ import type { AxiosError } from "axios";
 import TrashIcon from "@assets/icons/trashIcon.svg?react";
 
 interface IssuesListProps {
+  issues: Issue[];
   selectedProject: Project | null;
   selectedIssue: Issue | null;
   setSelectedIssue: Dispatch<SetStateAction<Issue | null>>;
+  setIssues: Dispatch<SetStateAction<Issue[]>>;
   setAlert: Dispatch<SetStateAction<AlertState>>;
 }
 
 function IssuesList({
+  issues,
   selectedProject,
   selectedIssue,
   setSelectedIssue,
+  setIssues,
   setAlert,
 }: IssuesListProps) {
-  const [issues, setIssues] = useState<Issue[]>([]);
   const [loadingIssues, setLoadingIssues] = useState<boolean>(false);
 
   useEffect(() => {

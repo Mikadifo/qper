@@ -2,12 +2,10 @@ import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import type { Issue } from "~/dtos/issue.dto";
 import type { AlertState } from "./Alert";
 import type { IssueValues } from "~/schemas/issue.schema";
-import axios, { AxiosError } from "axios";
-import { BASE_URL } from "~/constants";
+import { AxiosError } from "axios";
 import type { Project } from "~/dtos/project.dto";
-import { Formik } from "formik";
+import { Formik, Form } from "formik";
 import issueSchema from "~/schemas/issue.schema";
-import { Form } from "react-router";
 import Input from "./Input";
 import Button from "./Button";
 import api from "~/axiosConfig";
@@ -16,6 +14,7 @@ interface IssueReportProps {
   selectedIssue: Issue | null;
   selectedProject: Project | null;
   setSelectedIssue: Dispatch<SetStateAction<Issue | null>>;
+  setIssues: Dispatch<SetStateAction<Issue[]>>;
   setAlert: Dispatch<SetStateAction<AlertState>>;
 }
 
@@ -23,6 +22,7 @@ function IssueReport({
   selectedIssue,
   selectedProject,
   setSelectedIssue,
+  setIssues,
   setAlert,
 }: IssueReportProps) {
   const [issue, setIssue] = useState<Issue | null>(null);
@@ -58,11 +58,41 @@ function IssueReport({
   }
 
   const handleSubmit = async (values: IssueValues) => {
+    if (selectedIssue) {
+      handleUpdate(values);
+    } else {
+      handleCreate(values);
+    }
+  };
+
+  const handleCreate = async (values: IssueValues) => {
     try {
-      const res = await axios.post(
-        `${BASE_URL}/api/issues/new/${selectedProject?.id}`,
-        values,
-      );
+      const res = await api.post(`/issues/new/${selectedProject?.id}`, values);
+
+      const data = res.data;
+
+      setIssue(data);
+      setAlert({
+        open: true,
+        message: "Issue Created",
+        severity: "success",
+      });
+      setSelectedIssue(null);
+      setIssues((prev) => [...prev, data]);
+    } catch (err) {
+      const error = err as AxiosError<{ error: string }>;
+
+      setAlert({
+        open: true,
+        message: error.response?.data.error || "Something went wrong",
+        severity: "error",
+      });
+    }
+  };
+
+  const handleUpdate = async (values: IssueValues) => {
+    try {
+      const res = await api.put(`api/issues/${selectedIssue?.id}`, values);
 
       console.log(res);
     } catch (err) {
