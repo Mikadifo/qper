@@ -21,7 +21,7 @@ function Alert({ alert, setAlert }: AlertProps) {
 
   return (
     <div
-      className={`${alert.severity === "error" ? "bg-red text-white" : "bg-green text-dark"} font-body px-6 py-3 rounded-2xl whitespace-nowrap fixed bottom-6 left-1/2 -translate-x-1/2 flex gap-4 z-40 text-base`}
+      className={`${alert.severity === "error" ? "bg-red" : "bg-green"} text-white font-bold px-6 py-3 rounded-lg whitespace-nowrap fixed bottom-6 left-1/2 -translate-x-1/2 flex gap-4 z-40 text-base`}
       hidden={!alert.open}
     >
       <span>{alert.message}</span>

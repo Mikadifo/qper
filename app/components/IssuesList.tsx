@@ -56,6 +56,35 @@ function IssuesList({
     }
   }
 
+  async function deleteIssue(id: number) {
+    const response = confirm("TODO: SURE?");
+    if (!response) {
+      return;
+    }
+
+    try {
+      const response = await api.delete(`/issues/${id}`);
+
+      const { data } = response;
+
+      setIssues((prev) => prev.filter((i) => i.id !== id));
+
+      setAlert({
+        open: true,
+        message: data,
+        severity: "success",
+      });
+    } catch (err) {
+      const error = err as AxiosError<{ error: string }>;
+
+      setAlert({
+        open: true,
+        message: error.response?.data.error || "Something went wrong",
+        severity: "error",
+      });
+    }
+  }
+
   return (
     <div className="w-[364px]">
       <div className="flex justify-between items-center mb-8">
@@ -89,7 +118,10 @@ function IssuesList({
                 </div>
               </div>
 
-              <TrashIcon className="cursor-pointer" onClick={() => {}} />
+              <TrashIcon
+                className="cursor-pointer"
+                onClick={() => deleteIssue(issue.id)}
+              />
             </button>
           ))}
         </div>
