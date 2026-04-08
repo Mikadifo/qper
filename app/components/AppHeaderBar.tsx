@@ -52,6 +52,7 @@ function AppHeaderBar({
 
       setProjects(data);
       setSelectedProject(data[0]);
+      setSelectedIssue(null);
     } catch (err) {
       const error = err as AxiosError<{ error: string }>;
 
@@ -104,7 +105,11 @@ function AppHeaderBar({
                   <button
                     type="button"
                     className="cursor-pointer hover:opacity-75 w-full text-start px-4 py-2"
-                    onClick={() => setSelectedProject(project)}
+                    onClick={() => {
+                      setSelectedProject(project);
+                      openProjectOptions(false);
+                      setSelectedIssue(null);
+                    }}
                   >
                     {project.name}
                   </button>
