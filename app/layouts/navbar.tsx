@@ -54,7 +54,7 @@ function NavBar() {
   return (
     <>
       <nav
-        className={`px-8 py-4 flex justify-between ${isLoggedIn() && "border-b border-dark-16"}`}
+        className={`px-8 py-4 flex justify-between ${isLoggedIn() && "border-b border-dark-16"} sticky top-0 z-50 bg-white`}
       >
         <div className="flex gap-1 items-center">
           <Logo className="size-9" />
