@@ -6,4 +6,5 @@ export interface Issue {
   expectedResult: string;
   actualResult: string;
   createdAt: Date;
+  screenshots: string[];
 }

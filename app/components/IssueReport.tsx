@@ -10,6 +10,7 @@ import Input from "./Input";
 import Button from "./Button";
 import api from "~/axiosConfig";
 import FileInput from "./FileInput";
+import { screenshotFiles } from "./FileInput";
 
 interface IssueReportProps {
   selectedIssue: Issue | null;
@@ -64,6 +65,31 @@ function IssueReport({
     } else {
       handleCreate(values);
     }
+
+    uploadNewFiles(values);
+  };
+
+  const uploadNewFiles = async (values: IssueValues) => {
+    console.log("issue id: ", selectedIssue);
+    //TODO: uncomment below
+    //const newFiles = values.screenshots
+    //.filter((url) => url.startsWith("blob:"))
+    //.map((url) => screenshotFiles[url]);
+    //try {
+    //const formData = new FormData();
+    //newFiles.forEach((file) => {
+    //formData.append("screenshots", file);
+    //});
+    //const res = await api.post("/screenshots/upload");
+    //} catch (err) {
+    //const error = err as AxiosError<{ error: string }>;
+    //setAlert({
+    //open: true,
+    //message: error.response?.data.error || "Something went wrong",
+    //severity: "error",
+    //});
+    //}
+    //TODO: update new Files first
   };
 
   const handleCreate = async (values: IssueValues) => {
@@ -80,6 +106,9 @@ function IssueReport({
       });
       setSelectedIssue(null);
       setIssues((prev) => [...prev, data]);
+
+      //TODO finish this
+      //return issue.di
     } catch (err) {
       const error = err as AxiosError<{ error: string }>;
 
@@ -88,6 +117,8 @@ function IssueReport({
         message: error.response?.data.error || "Something went wrong",
         severity: "error",
       });
+
+      return 0;
     }
   };
 
@@ -125,7 +156,7 @@ function IssueReport({
           steps: issue?.steps || "",
           expectedResult: issue?.expectedResult || "",
           actualResult: issue?.actualResult || "",
-          screenshots: [] as File[],
+          screenshots: issue?.screenshots || [],
         }}
         validationSchema={issueSchema}
         onSubmit={handleSubmit}
@@ -212,7 +243,7 @@ function IssueReport({
               </div>
 
               <Button type="submit" className="bg-blue! text-white mt-16">
-                {selectedIssue ? "Update" : "Create"}
+                {selectedIssue ? "Update Issue" : "Create Issue"}
               </Button>
             </Form>
           );

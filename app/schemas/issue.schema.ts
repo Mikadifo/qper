@@ -6,7 +6,7 @@ export interface IssueValues {
   steps: string;
   expectedResult: string;
   actualResult: string;
-  screenshots: File[];
+  screenshots: string[];
 }
 
 const issueSchema = Yup.object({
