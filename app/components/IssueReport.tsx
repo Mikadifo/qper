@@ -60,36 +60,57 @@ function IssueReport({
   }
 
   const handleSubmit = async (values: IssueValues) => {
+    let issueId = 0;
+
     if (selectedIssue) {
-      handleUpdate(values);
+      await handleUpdate(values);
+      issueId = selectedIssue.id;
     } else {
-      handleCreate(values);
+      issueId = await handleCreate(values);
     }
 
-    uploadNewFiles(values);
+    uploadNewFiles(values, issueId);
   };
 
-  const uploadNewFiles = async (values: IssueValues) => {
-    console.log("issue id: ", selectedIssue);
-    //TODO: uncomment below
-    //const newFiles = values.screenshots
-    //.filter((url) => url.startsWith("blob:"))
-    //.map((url) => screenshotFiles[url]);
-    //try {
-    //const formData = new FormData();
-    //newFiles.forEach((file) => {
-    //formData.append("screenshots", file);
-    //});
-    //const res = await api.post("/screenshots/upload");
-    //} catch (err) {
-    //const error = err as AxiosError<{ error: string }>;
-    //setAlert({
-    //open: true,
-    //message: error.response?.data.error || "Something went wrong",
-    //severity: "error",
-    //});
-    //}
-    //TODO: update new Files first
+  const uploadNewFiles = async (values: IssueValues, issueId: number) => {
+    const newFiles = values.screenshots
+      .filter((url) => url.startsWith("blob:"))
+      .map((url) => screenshotFiles[url]);
+
+    try {
+      const formData = new FormData();
+      formData.append("issueId", issueId.toString());
+      formData.append("projectId", (selectedProject?.id || 0).toString());
+
+      newFiles.forEach((file) => {
+        formData.append("screenshots", file);
+      });
+
+      const res = await api.post("/screenshots/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/file",
+        },
+      });
+
+      const { data } = res;
+
+      if (selectedIssue) {
+        setSelectedIssue({
+          ...selectedIssue,
+          screenshots: [...(selectedIssue.screenshots || []), ...data.urls],
+        });
+      }
+    } catch (err) {
+      const error = err as AxiosError<{ error: string }>;
+      console.log(error);
+
+      setAlert({
+        open: true,
+        message: error.response?.data.error || "Something went wrong",
+        severity: "error",
+      });
+    }
+    //TODO: update new Files first, then figure how to handle delete
   };
 
   const handleCreate = async (values: IssueValues) => {
@@ -107,8 +128,7 @@ function IssueReport({
       setSelectedIssue(null);
       setIssues((prev) => [...prev, data]);
 
-      //TODO finish this
-      //return issue.di
+      return data.id;
     } catch (err) {
       const error = err as AxiosError<{ error: string }>;
 
