@@ -65,15 +65,16 @@ function IssuesList({
     try {
       const response = await api.delete(`/issues/${id}`);
 
-      const { data } = response;
+      if (response.status === 200) {
+        setIssues((prev) => prev.filter((i) => i.id !== id));
+        setSelectedIssue(null);
 
-      setIssues((prev) => prev.filter((i) => i.id !== id));
-
-      setAlert({
-        open: true,
-        message: data,
-        severity: "success",
-      });
+        setAlert({
+          open: true,
+          message: response.data,
+          severity: "success",
+        });
+      }
     } catch (err) {
       const error = err as AxiosError<{ error: string }>;
 

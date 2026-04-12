@@ -102,7 +102,6 @@ function IssueReport({
       }
     } catch (err) {
       const error = err as AxiosError<{ error: string }>;
-      console.log(error);
 
       setAlert({
         open: true,
