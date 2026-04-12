@@ -110,7 +110,6 @@ function IssueReport({
         severity: "error",
       });
     }
-    //TODO: update new Files first, then figure how to handle delete
   };
 
   const handleCreate = async (values: IssueValues) => {
@@ -252,6 +251,7 @@ function IssueReport({
                 <FileInput
                   label="Screenshots:"
                   name="screenshots"
+                  issueId={selectedIssue?.id}
                   projectId={selectedProject?.id}
                   error={touched.screenshots && Boolean(errors.screenshots)}
                   helperText={
@@ -259,6 +259,7 @@ function IssueReport({
                       ? String(errors.screenshots)
                       : ""
                   }
+                  setAlert={setAlert}
                 />
               </div>
 

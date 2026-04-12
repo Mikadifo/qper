@@ -1,23 +1,30 @@
 import AddIcon from "@assets/icons/newIcon.svg?react";
 import CloseIcon from "@assets/icons/closeIcon.svg?react";
 import { useFormikContext } from "formik";
-import { useRef } from "react";
+import { useRef, type Dispatch, type SetStateAction } from "react";
+import api from "~/axiosConfig";
+import type { AxiosError } from "axios";
+import type { AlertState } from "./Alert";
 
 export const screenshotFiles: Record<string, File> = {};
 
 interface FileInputProps {
   name: string;
+  issueId?: number;
   projectId?: number;
   label?: string;
   error?: boolean;
   helperText?: string;
+  setAlert: Dispatch<SetStateAction<AlertState>>;
 }
 
 function FileInput({
   name,
+  issueId,
   label = "",
   error = false,
   helperText = "",
+  setAlert,
 }: FileInputProps) {
   const { setFieldValue, values } = useFormikContext<any>();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -26,19 +33,49 @@ function FileInput({
     inputRef.current?.click();
   };
 
-  //TODO: handle remove uploaded r2 files too. We can delete the files when the user click on remove or we can add the URL to get removed in the backend when the user clicks on update. If first choice then maybe its better to let the user know that the img will be delted, by a confimation or a tooltip.
-  const handleRemove = (url: string) => {
+  const handleRemove = async (url: string) => {
     const current = Array.isArray(values[name]) ? values[name] : [];
-
-    setFieldValue(
-      name,
-      current.filter((u: string) => u !== url),
-    );
-
-    delete screenshotFiles[url];
 
     if (url.startsWith("blob:")) {
       URL.revokeObjectURL(url);
+      setFieldValue(
+        name,
+        current.filter((u: string) => u !== url),
+      );
+      delete screenshotFiles[url];
+    } else {
+      const confirmedDeletion = confirm(
+        "Are you sure you want to delete this screenshot and update the issue?",
+      );
+
+      if (confirmedDeletion) {
+        try {
+          const response = await api.delete(
+            `/screenshots/delete/${issueId}?imageUrl=${url}`,
+          );
+
+          if (response.status === 200) {
+            setAlert({
+              open: true,
+              message: "Screenshot deleted successfully",
+              severity: "success",
+            });
+            delete screenshotFiles[url];
+            setFieldValue(
+              name,
+              current.filter((u: string) => u !== url),
+            );
+          }
+        } catch (err) {
+          const error = err as AxiosError<{ error: string }>;
+
+          setAlert({
+            open: true,
+            message: error.response?.data.error || "Something went wrong",
+            severity: "error",
+          });
+        }
+      }
     }
   };
 
