@@ -6,6 +6,8 @@ interface ButtonProps {
   className?: string;
   children: React.ReactNode;
   onClick?: () => void;
+  target?: string;
+  rel?: string;
 }
 
 function Button({
@@ -14,12 +16,14 @@ function Button({
   children,
   to = "",
   onClick = () => {},
+  target = "",
+  rel = "",
 }: ButtonProps) {
   const styles = `w-fit h-fit justify-center inline-flex items-center bg-teal rounded-lg py-2 px-6 text-white font-bold text-base hover:opacity-75 cursor-pointer ${className}`;
 
   if (type === "link") {
     return (
-      <Link to={to} className={styles}>
+      <Link to={to} className={styles} target={target} rel={rel}>
         {children}
       </Link>
     );

@@ -12,4 +12,5 @@ export default [
   ]),
   route("login", "routes/login.tsx"),
   route("register", "routes/register.tsx"),
+  route("report/:projectId", "routes/report.tsx"),
 ] satisfies RouteConfig;

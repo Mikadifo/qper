@@ -129,7 +129,13 @@ function AppHeaderBar({
       )}
 
       <div className="flex gap-8">
-        <Button className="bg-dark! flex gap-2">
+        <Button
+          type="link"
+          to={`/report/${selectedProject?.id}`}
+          className="bg-dark! flex gap-2"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <DownloadIcon />
           Download Report
         </Button>
