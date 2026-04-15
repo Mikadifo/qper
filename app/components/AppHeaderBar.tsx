@@ -32,6 +32,7 @@ function AppHeaderBar({
 }: AppHeaderBarProps) {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loadingProjects, setLoadingProjects] = useState(false);
+  const [loadingReport, setLoadingReport] = useState(false);
   const [isProjectsOptionsOpen, openProjectOptions] = useState(false);
   const formDialogRef = useRef<HTMLDialogElement | null>(null);
 
@@ -69,6 +70,48 @@ function AppHeaderBar({
   const openFormDialog = () => {
     if (formDialogRef.current) {
       formDialogRef.current.showModal();
+    }
+  };
+
+  const downloadReport = async () => {
+    try {
+      setLoadingReport(true);
+
+      const response = await api.post(
+        `/project/export/${selectedProject?.id}`,
+        {},
+        {
+          responseType: "arraybuffer",
+        },
+      );
+
+      const { data } = response;
+
+      const blob = new Blob([data], {
+        type: "application/pdf",
+      });
+
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+
+      a.href = url;
+      a.download = `qa-report-${selectedProject?.name}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.log(err);
+      const error = err as AxiosError<{ error: string }>;
+
+      setAlert({
+        open: true,
+        message: error.response?.data.error || "Something went wrong",
+        severity: "error",
+      });
+    } finally {
+      setLoadingReport(false);
     }
   };
 
@@ -130,14 +173,12 @@ function AppHeaderBar({
 
       <div className="flex gap-8">
         <Button
-          type="link"
-          to={`/report/${selectedProject?.id}`}
           className="bg-dark! flex gap-2"
-          target="_blank"
-          rel="noopener noreferrer"
+          onClick={downloadReport}
+          disabled={loadingReport}
         >
           <DownloadIcon />
-          Download Report
+          {loadingReport ? "Generating Report..." : "Download Report"}
         </Button>
 
         <Button

@@ -8,6 +8,7 @@ interface ButtonProps {
   onClick?: () => void;
   target?: string;
   rel?: string;
+  disabled?: boolean;
 }
 
 function Button({
@@ -18,8 +19,9 @@ function Button({
   onClick = () => {},
   target = "",
   rel = "",
+  disabled = false,
 }: ButtonProps) {
-  const styles = `w-fit h-fit justify-center inline-flex items-center bg-teal rounded-lg py-2 px-6 text-white font-bold text-base hover:opacity-75 cursor-pointer ${className}`;
+  const styles = `w-fit h-fit justify-center inline-flex items-center bg-teal rounded-lg py-2 px-6 text-white font-bold text-base hover:opacity-75 ${disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer"} ${className}`;
 
   if (type === "link") {
     return (
@@ -30,7 +32,12 @@ function Button({
   }
 
   return (
-    <button type={type} className={styles} onClick={onClick}>
+    <button
+      type={type}
+      className={styles}
+      onClick={onClick}
+      disabled={disabled}
+    >
       {children}
     </button>
   );
