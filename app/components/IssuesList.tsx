@@ -5,6 +5,7 @@ import type { AlertState } from "./Alert";
 import api from "~/axiosConfig";
 import type { AxiosError } from "axios";
 import TrashIcon from "@assets/icons/trashIcon.svg?react";
+import { timeAgo } from "~/utils/time";
 
 interface IssuesListProps {
   issues: Issue[];
@@ -115,12 +116,14 @@ function IssuesList({
 
                 <div className="flex flex-col text-start">
                   <span className="font-bold text-base">{issue.title}</span>
-                  <span className="text-sm text-dark-80">2min ago</span>
+                  <span className="text-sm text-dark-80">
+                    {timeAgo(issue.createdAt)}
+                  </span>
                 </div>
               </div>
 
               <TrashIcon
-                className="cursor-pointer"
+                className="cursor-pointer min-w-4"
                 onClick={() => deleteIssue(issue.id)}
               />
             </button>

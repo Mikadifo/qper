@@ -124,7 +124,7 @@ function IssueReport({
         severity: "success",
       });
       setSelectedIssue(null);
-      setIssues((prev) => [...prev, data]);
+      setIssues((prev) => [data, ...prev]);
 
       return data.id;
     } catch (err) {
