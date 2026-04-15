@@ -52,3 +52,23 @@ html {
   font-family: var(--font-sans);
   color: var(--color-dark);
 }
+
+@page {
+  size: A4;
+  margin: 0;
+}
+
+@media print {
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact;
+  }
+
+  :root,
+  body,
+  html {
+    background: #ffffff;
+    color: #000000;
+  }
+}
